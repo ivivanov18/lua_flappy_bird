@@ -21,4 +21,7 @@ function Bird:update(dt)
 	if love.keyboard.wasPressed('space') then
 		self.dy = globalData.JUMP
 	end
+	if self.y + self.height >= globalData.VIRTUAL_HEIGHT - globalData.GROUND_HEIGHT then
+		self.y = globalData.VIRTUAL_HEIGHT - globalData.GROUND_HEIGHT - self.height
+	end
 end
