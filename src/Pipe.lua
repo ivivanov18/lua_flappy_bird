@@ -5,10 +5,11 @@ Pipe = Class{}
 local PIPE_IMAGE = love.graphics.newImage('assets/pipe.png')
 local PIPE_SCROLL = -60
 
-function Pipe:init()
+function Pipe:init(orientation, y)
 	self.x = globalData.VIRTUAL_WIDTH
-	self.y = math.random( globalData.VIRTUAL_HEIGHT / 4, globalData.VIRTUAL_HEIGHT - 10  )
+	self.y = y
 	self.width = PIPE_IMAGE:getWidth()
+	self.orientation = orientation
 end
 
 function Pipe:update(dt)
@@ -16,5 +17,5 @@ function Pipe:update(dt)
 end
 
 function Pipe:render()
-	love.graphics.draw(PIPE_IMAGE, self.x, self.y)
+	love.graphics.draw(PIPE_IMAGE, self.x, (self.orientation == 'top' and self.y + globalData.PIPE_HEIGHT or self.y), 0, 1, self.orientation == 'top' and -1 or 1)
 end

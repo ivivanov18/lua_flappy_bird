@@ -7,5 +7,8 @@ data.GRAVITY = 20
 data.JUMP = -5
 data.GROUND_HEIGHT = 16
 data.SPAWN_INTERVAL = 2
+data.PIPE_HEIGHT = 288
+data.PIPE_WIDTH = 70
+data.PIPE_SPEED = 60
 
 return data
