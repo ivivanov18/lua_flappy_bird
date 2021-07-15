@@ -25,3 +25,12 @@ function Bird:update(dt)
 		self.y = globalData.VIRTUAL_HEIGHT - globalData.GROUND_HEIGHT - self.height
 	end
 end
+
+function Bird:collides(pipe)
+	if (self.x + 2) + (self.width - 4) >= pipe.x and self.x + 2 <= pipe.x + globalData.PIPE_WIDTH then
+		if (self.y + 2) + (self.height - 4) >= pipe.y and self.y + 2 <= pipe.y + globalData.PIPE_HEIGHT then
+			return true
+		end
+	end
+	return false
+end

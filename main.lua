@@ -10,6 +10,7 @@ local background = love.graphics.newImage('assets/background.png')
 local backgroundScroll = 0
 local ground = love.graphics.newImage('assets/ground.png')
 local groundScroll = 0
+local scrolling = true
 
 local BACKGROUND_SCROLL_SPEED = 30
 local GROUND_SCROLL_SPEED = 60
@@ -30,20 +31,27 @@ function love.load()
 end
 
 function love.update(dt)
-	backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
-	groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % globalData.VIRTUAL_WIDTH
-	spawnTimer = spawnTimer + dt
-	if spawnTimer > globalData.SPAWN_INTERVAL then
-		local y = math.max(-globalData.PIPE_HEIGHT + 10, math.min(lastY + math.random(-20,20), globalData.VIRTUAL_HEIGHT - 90 - globalData.PIPE_HEIGHT))
-		lastY = y
-		table.insert(pipePairs, PipePair(y))
-		spawnTimer = 0
-	end
-	bird:update(dt)
-	for k, pair in pairs(pipePairs) do
-		pair:update(dt)
-		if pair.x < -globalData.PIPE_WIDTH then
-			table.remove(pipePairs, k)
+	if scrolling then
+		backgroundScroll = (backgroundScroll + BACKGROUND_SCROLL_SPEED * dt) % BACKGROUND_LOOPING_POINT
+		groundScroll = (groundScroll + GROUND_SCROLL_SPEED * dt) % globalData.VIRTUAL_WIDTH
+		spawnTimer = spawnTimer + dt
+		if spawnTimer > globalData.SPAWN_INTERVAL then
+			local y = math.max(-globalData.PIPE_HEIGHT + 10, math.min(lastY + math.random(-20,20), globalData.VIRTUAL_HEIGHT - 90 - globalData.PIPE_HEIGHT))
+			lastY = y
+			table.insert(pipePairs, PipePair(y))
+			spawnTimer = 0
+		end
+		bird:update(dt)
+		for k, pair in pairs(pipePairs) do
+			pair:update(dt)
+			for k, pipe in pairs(pair.pipes) do 
+				if bird:collides(pipe) then
+					scrolling = false
+				end
+			end
+			if pair.x < -globalData.PIPE_WIDTH then
+				table.remove(pipePairs, k)
+			end
 		end
 	end
 	love.keyboard.keysPressed = {}
